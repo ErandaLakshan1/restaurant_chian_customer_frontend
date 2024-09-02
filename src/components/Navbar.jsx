@@ -1,24 +1,68 @@
 import React from "react";
 import logo from "../assets/images/logo.png";
 import "../assets/styles/components/nav_bar.css";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav class="navbar">
-      <div class="navbar-logo">
+    <nav className="navbar">
+      <div className="navbar-logo">
         <img src={logo} alt="logo" />
       </div>
 
-      <div class="navbar-links">
-        <p class="nav-item">Home</p>
-        <p class="nav-item">Returants</p>
-        <p class="nav-item">Contact</p>
-        <p class="nav-item">About Us</p>
+      <div className="navbar-links">
+        <p className="nav-item">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Home
+          </NavLink>
+        </p>
+        <p className="nav-item">
+          <NavLink
+            to="/restaurants"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Restaurants
+          </NavLink>
+        </p>
+        <p className="nav-item">
+          <NavLink
+            to="/contact"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Contact
+          </NavLink>
+        </p>
+        <p className="nav-item">
+          <NavLink
+            to="/about"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            About Us
+          </NavLink>
+        </p>
       </div>
 
-      <div class="navbar-auth">
-        <p class="auth-item">Sign In</p>
-        <p class="auth-item">Sign Up</p>
+      <div className="navbar-auth">
+        <p className="auth-item">
+          <NavLink
+            to="/sign-in"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Sign In
+          </NavLink>
+        </p>
+        <p className="auth-item">
+          <NavLink
+            to="/sign-up"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Sign Up
+          </NavLink>
+        </p>
       </div>
     </nav>
   );

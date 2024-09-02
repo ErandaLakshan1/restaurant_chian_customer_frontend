@@ -1,4 +1,4 @@
-import React, { useState, CSSProperties } from "react";
+import React, { useState } from "react";
 import "../../assets/styles/pages/auth/registration.css";
 import welcomeImg from "../../assets/images/welcome.svg";
 import Navbar from "../../components/Navbar";
@@ -117,102 +117,111 @@ const Registration = () => {
             <h1>Sign Up Form</h1>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="username">Enter your Username</label>
+                <label htmlFor="username" className="form-group-label">Enter your Username</label>
                 <input
                   type="text"
                   id="username"
                   name="username"
                   value={data.username}
                   onChange={handleChange}
+                  className="form-group-input"
                 />
               </div>
               <div className="form-group form-group-row">
                 <div className="form-group-half">
-                  <label htmlFor="firstName">Enter Your First Name</label>
+                  <label htmlFor="firstName" className="form-group-label">Enter Your First Name</label>
                   <input
                     type="text"
                     id="firstName"
                     name="firstName"
                     value={data.firstName}
                     onChange={handleChange}
+                    className="form-group-input"
                   />
                 </div>
                 <div className="form-group-half">
-                  <label htmlFor="lastName">Enter Your Last Name</label>
+                  <label htmlFor="lastName" className="form-group-label">Enter Your Last Name</label>
                   <input
                     type="text"
                     id="lastName"
                     name="lastName"
                     value={data.lastName}
                     onChange={handleChange}
+                    className="form-group-input"
                   />
                 </div>
               </div>
               <div className="form-group form-group-row">
                 <div className="form-group-half">
-                  <label htmlFor="password">Enter a Password</label>
+                  <label htmlFor="password" className="form-group-label">Enter a Password</label>
                   <input
                     type="password"
                     id="password"
                     name="password"
                     value={data.password}
                     onChange={handleChange}
+                    className="form-group-input"
                   />
                 </div>
                 <div className="form-group-half">
-                  <label htmlFor="retypePassword">Re-type Password</label>
+                  <label htmlFor="retypePassword" className="form-group-label">Re-type Password</label>
                   <input
                     type="password"
                     id="retypePassword"
                     name="retypePassword"
                     value={data.retypePassword}
                     onChange={handleChange}
+                    className="form-group-input"
                   />
                 </div>
               </div>
               <div className="form-group">
-                <label htmlFor="email">Enter Your Email</label>
+                <label htmlFor="email" className="form-group-label">Enter Your Email</label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={data.email}
                   onChange={handleChange}
+                  className="form-group-input"
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="address">Enter Your Address</label>
+                <label htmlFor="address" className="form-group-label">Enter Your Address</label>
                 <input
                   type="text"
                   id="address"
                   name="address"
                   value={data.address}
                   onChange={handleChange}
+                  className="form-group-input"
                 />
               </div>
               <div className="form-group form-group-row">
                 <div className="form-group-half">
-                  <label htmlFor="nic">Enter Your NIC</label>
+                  <label htmlFor="nic" className="form-group-label">Enter Your NIC</label>
                   <input
                     type="text"
                     id="nic"
                     name="nic"
                     value={data.nic}
                     onChange={handleChange}
+                    className="form-group-input"
                   />
                 </div>
                 <div className="form-group-half">
-                  <label htmlFor="mobileNumber">Enter Your Mobile Number</label>
+                  <label htmlFor="mobileNumber" className="form-group-label">Enter Your Mobile Number</label>
                   <input
                     type="text"
                     id="mobileNumber"
                     name="mobileNumber"
                     value={data.mobileNumber}
                     onChange={handleChange}
+                    className="form-group-input"
                   />
                 </div>
               </div>
-              <button type="submit">Sign Up</button>
+              <button type="submit" className="sign-up-button">Sign Up</button>
             </form>
             <p className="signin-link">
               Already have an account? <a href="/signin">Sign in here</a>

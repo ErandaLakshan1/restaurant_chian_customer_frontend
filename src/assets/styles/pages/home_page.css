@@ -35,8 +35,8 @@
 }
 
 .branch-selection {
-  width: 250px; /* Explicitly set the width */
-  height: 50px; /* Ensure consistent height */
+  width: 250px; 
+  height: 50px; 
   line-height: 50px;
   padding: 0 20px;
   border-radius: 10px;
@@ -49,8 +49,8 @@
 }
 
 .branch-selection select {
-  width: 100%; /* Ensure it takes up full width */
-  height: 100%; /* Ensure it takes up full height */
+  width: 100%; 
+  height: 100%; 
   border: none;
   background: transparent;
   padding: 0;
@@ -63,8 +63,8 @@
 }
 
 .order-now-button {
-  width: 150px; /* Explicitly set the width */
-  height: 50px; /* Ensure consistent height */
+  width: 150px; 
+  height: 50px; 
   line-height: 50px;
   padding: 0 20px;
   border-radius: 10px;

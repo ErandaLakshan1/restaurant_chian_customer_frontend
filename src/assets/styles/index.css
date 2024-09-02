@@ -10,3 +10,11 @@ ul {
   box-sizing: border-box;
 }
 
+.nav-link {
+  text-decoration: none;
+}
+
+.nav-link.active {
+  color: #ff8c00;
+  font-weight: bold;
+}
