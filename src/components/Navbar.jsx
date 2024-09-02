@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../assets/images/logo.png";
-import '../assets/styles/components/nav_bar.css'
+import "../assets/styles/components/nav_bar.css";
 
 const Navbar = () => {
   return (
@@ -11,9 +11,9 @@ const Navbar = () => {
 
       <div class="navbar-links">
         <p class="nav-item">Home</p>
-        <p class="nav-item">Home</p>
-        <p class="nav-item">Home</p>
-        <p class="nav-item">Home</p>
+        <p class="nav-item">Returants</p>
+        <p class="nav-item">Contact</p>
+        <p class="nav-item">About Us</p>
       </div>
 
       <div class="navbar-auth">
