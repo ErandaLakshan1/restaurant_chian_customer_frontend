@@ -1,5 +1,4 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import "../assets/styles/pages/home_page.css";
 import "../assets/styles/index.css";
 import heroImage from "../assets/images/hero-iamge.svg";
@@ -8,38 +7,52 @@ import step1Img from "../assets/images/step1.svg";
 import step2Img from "../assets/images/step2.svg";
 import step3Img from "../assets/images/step3.svg";
 import currentLocation from "../assets/images/current-location.svg";
-import { useState, useEffect } from "react";
 import customerFeedback from "../assets/images/cutomer-feedback.svg";
 import avatar from "../assets/images/avatar.png";
 import Footer from "../components/Footer";
+import { getAllBranches } from "../service/branch.service";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [branches, setBranches] = useState([]);
 
   const feedbacks = [
     {
       name: "John Doe",
       feedback: "Fantastic service and great food. I always order from here!",
-      avatar: avatar,
+      avatar,
     },
     {
       name: "Jane Smith",
       feedback:
         "The delivery was prompt and the meal was delicious. Highly recommend!",
-      avatar: avatar,
+      avatar,
     },
     {
       name: "Samuel Green",
       feedback: "Amazing variety and quality. The best place for a quick bite!",
-      avatar: avatar,
+      avatar,
     },
     {
       name: "Samuel Green",
-      feedback:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus amet perspiciatis at vero voluptate, repudiandae officia. Ut modi unde omnis laborum sed nam, quisquam voluptatem delectus corrupti! Eum, aspernatur illo",
-      avatar: avatar,
+      feedback: "Lorem ipsum dolor sit amet consectetur adipisicing elit...",
+      avatar,
     },
   ];
+
+  // to get all the branches
+  const fetchBranches = async () => {
+    try {
+      const response = await getAllBranches();
+      setBranches(response.data);
+    } catch (error) {
+      console.error("Error fetching branches:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBranches();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,57 +64,42 @@ const Home = () => {
   return (
     <>
       <div className="home-page-bg">
-        <motion.div
-          className="home-page"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
+        <div className="home-page">
           <Navbar />
-          <section className="hero-section">
-            <motion.div
+          <section className="hero-section" data-aos="fade-up">
+            <div
               className="hero-content"
-              initial={{ x: "-100vw" }}
-              animate={{ x: 0 }}
-              transition={{ type: "spring", stiffness: 50 }}
+              data-aos="fade-right"
+              data-aos-delay="200"
             >
               <h1>The Best Restaurants In Your Home</h1>
               <p>Experience the best dining from the comfort of your home.</p>
-              <motion.select className="branch-selection">
+              <select className="branch-selection">
                 <option>Select the branch</option>
-              </motion.select>
-              <motion.button
-                className="order-now-button"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                Order Now
-              </motion.button>
-            </motion.div>
-            <motion.img
+                {branches.map((branch) => {
+                  return (
+                    <option key={branch.id} value={branch.name}>
+                      {branch.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <button className="order-now-button">Order Now</button>
+            </div>
+            <img
               src={heroImage}
               className="hero-image"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 1.5 }}
+              alt="Hero"
+              data-aos="fade-left"
             />
           </section>
-        </motion.div>
+        </div>
       </div>
 
-      <motion.section
-        className="how-it-works"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
+      <section className="how-it-works" data-aos="fade-up" data-aos-delay="300">
         <h2>How It Works</h2>
         <div className="steps">
-          <motion.div
-            className="step"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
+          <div className="step" data-aos="fade-right" data-aos-delay="100">
             <img src={step1Img} alt="Step 1" />
             <div className="text">
               <p className="title">01. Select Restaurant</p>
@@ -111,25 +109,17 @@ const Home = () => {
                 </i>
               </p>
             </div>
-          </motion.div>
-          <motion.div
-            className="step"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
+          </div>
+          <div className="step" data-aos="fade-right" data-aos-delay="200">
             <img src={step2Img} alt="Step 2" />
             <div className="text">
-              <p className="title"> 02. Select Menu</p>
+              <p className="title">02. Select Menu</p>
               <p className="description">
                 <i>Browse the menu and pick your favorite dishes to order.</i>
               </p>
             </div>
-          </motion.div>
-          <motion.div
-            className="step"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
+          </div>
+          <div className="step" data-aos="fade-right" data-aos-delay="300">
             <img src={step3Img} alt="Step 3" />
             <div className="text">
               <p className="title">03. Wait for Delivery</p>
@@ -139,30 +129,15 @@ const Home = () => {
                 </i>
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.div
-        className="feature-section"
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <motion.div
-          className="image-content"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
+      <div className="feature-section" data-aos="fade-up" data-aos-delay="400">
+        <div className="image-content" data-aos="fade-right">
           <img src={currentLocation} alt="Nearby Outlets" />
-        </motion.div>
-        <motion.div
-          className="text-content"
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-        >
+        </div>
+        <div className="text-content" data-aos="fade-left">
           <h3 className="feature-heading">
             There are lots of outlets for you nearby
           </h3>
@@ -175,35 +150,22 @@ const Home = () => {
               food and service at locations just around the corner!
             </i>
           </p>
-          <motion.button
-            className="view-all-button"
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
+          <button className="view-all-button">
             View All Restaurants <span className="arrow">→</span>
-          </motion.button>
-        </motion.div>
-      </motion.div>
+          </button>
+        </div>
+      </div>
 
-      <motion.section
+      <section
         className="customers-say"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        data-aos="fade-up"
+        data-aos-delay="500"
       >
         <div className="feedback-container">
-          <motion.h2
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            What Customers Say About Us
-          </motion.h2>
+          <h2>What Customers Say About Us</h2>
           <div className="feedbacks">
             {feedbacks.map((feedback, index) => (
-              <motion.div
+              <div
                 key={index}
                 className={`feedback ${index === currentIndex ? "active" : ""}`}
                 initial={{ opacity: 0 }}
@@ -219,14 +181,15 @@ const Home = () => {
                   />
                   <p className="customer-name">{feedback.name}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
         <div className="image-container">
           <img src={customerFeedback} alt="Customer Experiences" />
         </div>
-      </motion.section>
+      </section>
+
       <Footer />
     </>
   );
