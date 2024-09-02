@@ -6,13 +6,65 @@ import { popAlert } from "../../utils/alerts";
 import Loader from "../../components/Loader";
 import LoginImg from "../../assets/images/login-in.svg";
 import { NavLink } from "react-router-dom";
+import { loginUser } from "../../service/auth.service";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+
+    if (!data.username || !data.password) {
+      popAlert("Oops...", "All the fields are required!", "error");
+    } else {
+      setLoading(true);
+
+      const formdata = {
+        username: data.username,
+        password: data.password,
+      };
+
+      try {
+        const response = await loginUser(formdata);
+        if (!response.success) {
+          popAlert("Oops...", response.errors.detail, "error");
+        } else {
+          setData({
+            username: "",
+            password: "",
+          });
+
+          localStorage.setItem("access", response.data.access);
+          localStorage.setItem("refresh", response.data.refresh);
+          navigate("/");
+        }
+      } catch (error) {
+        popAlert(
+          "Oops...",
+          "An unexpected error occurred. Please try again.",
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <>
       {loading ? Loader(loading) : null}
@@ -25,7 +77,7 @@ const Login = () => {
 
           <div className="div form-section">
             <h1>Sign In Form</h1>
-            <form>
+            <form onSubmit={handlesubmit}>
               <div className="form-group">
                 <label htmlFor="username" className="lg-form-group-label">
                   Enter Your Username
@@ -35,7 +87,8 @@ const Login = () => {
                   id="username"
                   name="username"
                   value={data.username}
-                  className="input form-group-input"
+                  onChange={handleChange}
+                  className="form-group-input"
                 />
               </div>
 
@@ -48,7 +101,8 @@ const Login = () => {
                   id="password"
                   name="password"
                   value={data.password}
-                  className="input form-group-input"
+                  onChange={handleChange}
+                  className="form-group-input"
                 />
               </div>
               <button className="sign-in-button">Sign In</button>

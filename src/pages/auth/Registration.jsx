@@ -8,8 +8,10 @@ import { popAlert } from "../../utils/alerts";
 import { registerUser } from "../../service/auth.service";
 import Loader from "../../components/Loader";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -87,11 +89,7 @@ const Registration = () => {
             nic: "",
             mobileNumber: "",
           });
-          popAlert(
-            "Success!",
-            "Registration successful. Redirecting to login.",
-            "success"
-          );
+          navigate("/sign-in");
         }
       } catch (error) {
         popAlert(
