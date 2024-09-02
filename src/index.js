@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 
 import Home from "./pages/Home";
 import Registration from "./pages/auth/Registration";
+import Login from "./pages/auth/Login";
 
 AOS.init();
 
@@ -16,6 +17,7 @@ root.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/sign-up" element={<Registration />} />
+      <Route path="/sign-in" element={<Login />} />
     </Routes>
   </BrowserRouter>
 );

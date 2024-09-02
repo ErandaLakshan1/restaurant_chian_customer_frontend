@@ -7,6 +7,7 @@ import Footer from "../../components/Footer";
 import { popAlert } from "../../utils/alerts";
 import { registerUser } from "../../service/auth.service";
 import Loader from "../../components/Loader";
+import { NavLink } from "react-router-dom";
 
 const Registration = () => {
   const [data, setData] = useState({
@@ -117,7 +118,9 @@ const Registration = () => {
             <h1>Sign Up Form</h1>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="username" className="form-group-label">Enter your Username</label>
+                <label htmlFor="username" className="form-group-label">
+                  Enter your Username
+                </label>
                 <input
                   type="text"
                   id="username"
@@ -129,7 +132,9 @@ const Registration = () => {
               </div>
               <div className="form-group form-group-row">
                 <div className="form-group-half">
-                  <label htmlFor="firstName" className="form-group-label">Enter Your First Name</label>
+                  <label htmlFor="firstName" className="form-group-label">
+                    Enter Your First Name
+                  </label>
                   <input
                     type="text"
                     id="firstName"
@@ -140,7 +145,9 @@ const Registration = () => {
                   />
                 </div>
                 <div className="form-group-half">
-                  <label htmlFor="lastName" className="form-group-label">Enter Your Last Name</label>
+                  <label htmlFor="lastName" className="form-group-label">
+                    Enter Your Last Name
+                  </label>
                   <input
                     type="text"
                     id="lastName"
@@ -153,7 +160,9 @@ const Registration = () => {
               </div>
               <div className="form-group form-group-row">
                 <div className="form-group-half">
-                  <label htmlFor="password" className="form-group-label">Enter a Password</label>
+                  <label htmlFor="password" className="form-group-label">
+                    Enter a Password
+                  </label>
                   <input
                     type="password"
                     id="password"
@@ -164,7 +173,9 @@ const Registration = () => {
                   />
                 </div>
                 <div className="form-group-half">
-                  <label htmlFor="retypePassword" className="form-group-label">Re-type Password</label>
+                  <label htmlFor="retypePassword" className="form-group-label">
+                    Re-type Password
+                  </label>
                   <input
                     type="password"
                     id="retypePassword"
@@ -176,7 +187,9 @@ const Registration = () => {
                 </div>
               </div>
               <div className="form-group">
-                <label htmlFor="email" className="form-group-label">Enter Your Email</label>
+                <label htmlFor="email" className="form-group-label">
+                  Enter Your Email
+                </label>
                 <input
                   type="email"
                   id="email"
@@ -187,7 +200,9 @@ const Registration = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="address" className="form-group-label">Enter Your Address</label>
+                <label htmlFor="address" className="form-group-label">
+                  Enter Your Address
+                </label>
                 <input
                   type="text"
                   id="address"
@@ -199,7 +214,9 @@ const Registration = () => {
               </div>
               <div className="form-group form-group-row">
                 <div className="form-group-half">
-                  <label htmlFor="nic" className="form-group-label">Enter Your NIC</label>
+                  <label htmlFor="nic" className="form-group-label">
+                    Enter Your NIC
+                  </label>
                   <input
                     type="text"
                     id="nic"
@@ -210,7 +227,9 @@ const Registration = () => {
                   />
                 </div>
                 <div className="form-group-half">
-                  <label htmlFor="mobileNumber" className="form-group-label">Enter Your Mobile Number</label>
+                  <label htmlFor="mobileNumber" className="form-group-label">
+                    Enter Your Mobile Number
+                  </label>
                   <input
                     type="text"
                     id="mobileNumber"
@@ -221,10 +240,13 @@ const Registration = () => {
                   />
                 </div>
               </div>
-              <button type="submit" className="sign-up-button">Sign Up</button>
+              <button type="submit" className="sign-up-button">
+                Sign Up
+              </button>
             </form>
             <p className="signin-link">
-              Already have an account? <a href="/signin">Sign in here</a>
+              Already have an account?{" "}
+              <NavLink to={"/sign-in"}>Sign in here</NavLink>
             </p>
           </div>
         </div>
