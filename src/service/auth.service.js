@@ -1,9 +1,12 @@
 import { getApI } from "../utils/axios";
 
-// to get all availabel branches
-export const getAllBranches = async () => {
+//  for register user
+export const registerUser = async (data) => {
   try {
-    const response = await getApI().get("api/branches/get_branches/");
+    const response = await getApI().post(
+      "api/users/create/register_user/",
+      data
+    );
     return { success: true, data: response.data };
   } catch (error) {
     if (error.response && error.response.data) {

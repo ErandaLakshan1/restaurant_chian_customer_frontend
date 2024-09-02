@@ -11,10 +11,13 @@ import customerFeedback from "../assets/images/cutomer-feedback.svg";
 import avatar from "../assets/images/avatar.png";
 import Footer from "../components/Footer";
 import { getAllBranches } from "../service/branch.service";
+import Loader from "../components/Loader";
+import { popAlert } from "../utils/alerts";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [branches, setBranches] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const feedbacks = [
     {
@@ -42,11 +45,18 @@ const Home = () => {
 
   // to get all the branches
   const fetchBranches = async () => {
+    setLoading(true);
     try {
       const response = await getAllBranches();
       setBranches(response.data);
     } catch (error) {
-      console.error("Error fetching branches:", error);
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,6 +73,7 @@ const Home = () => {
 
   return (
     <>
+      {loading ? Loader(loading) : null}
       <div className="home-page-bg">
         <div className="home-page">
           <Navbar />
@@ -74,17 +85,17 @@ const Home = () => {
             >
               <h1>The Best Restaurants In Your Home</h1>
               <p>Experience the best dining from the comfort of your home.</p>
-              <select className="branch-selection">
-                <option>Select the branch</option>
-                {branches.map((branch) => {
-                  return (
+              <div className="branch-selection-container">
+                <select className="branch-selection">
+                  <option>Select the branch</option>
+                  {branches.map((branch) => (
                     <option key={branch.id} value={branch.name}>
                       {branch.name}
                     </option>
-                  );
-                })}
-              </select>
-              <button className="order-now-button">Order Now</button>
+                  ))}
+                </select>
+                <button className="order-now-button">Order Now</button>
+              </div>
             </div>
             <img
               src={heroImage}

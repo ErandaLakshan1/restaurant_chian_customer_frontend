@@ -26,25 +26,59 @@
   margin-bottom: 30px;
 }
 
+.branch-selection-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 .branch-selection {
-  background-color: #fff;
-  border: none;
-  padding: 10px 30px;
-  margin-right: 20px;
-  font-size: 16px;
+  width: 250px; /* Explicitly set the width */
+  height: 50px; /* Ensure consistent height */
+  line-height: 50px;
+  padding: 0 20px;
   border-radius: 10px;
+  font-size: 16px;
   border: 1px solid #ff8c00;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.branch-selection select {
+  width: 100%; /* Ensure it takes up full width */
+  height: 100%; /* Ensure it takes up full height */
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .order-now-button {
+  width: 150px; /* Explicitly set the width */
+  height: 50px; /* Ensure consistent height */
+  line-height: 50px;
+  padding: 0 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: #ff8c00;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-align: center;
   transition: all 0.2s ease;
-  border-radius: 10px;
-  background-color: #ff8c00;
 }
 
 .order-now-button:hover {
