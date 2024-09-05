@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/images/logo.png";
 import "../assets/styles/components/nav_bar.css";
 import { NavLink } from "react-router-dom";
+import {
+  isAuthenticated,
+  removeAccessToken,
+  removeRefreshToken,
+} from "../utils/authUtils";
+import { useNavigate } from "react-router-dom";
+import avtart from "../assets/images/avatar.png";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleSignOut = () => {
+    removeAccessToken();
+    removeRefreshToken();
+    navigate("/");
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -47,22 +67,65 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-auth">
-        <p className="auth-item">
-          <NavLink
-            to="/sign-in"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            Sign In
-          </NavLink>
-        </p>
-        <p className="auth-item">
-          <NavLink
-            to="/sign-up"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            Sign Up
-          </NavLink>
-        </p>
+        {isAuthenticated() ? (
+          <div className="navbar-user">
+            <img
+              src={avtart}
+              alt="User Avatar"
+              className="user-avatar"
+              onClick={handleDropdownToggle}
+            />
+            {showDropdown && (
+              <div className="dropdown-menu">
+                <button
+                  className="dropdown-close"
+                  onClick={handleDropdownToggle}
+                >
+                  ×
+                </button>
+                <NavLink
+                  to="/profile"
+                  className="dropdown-item"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  Profile
+                </NavLink>
+                <NavLink
+                  to="/order-history"
+                  className="dropdown-item"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  Order History
+                </NavLink>
+                <button
+                  onClick={handleSignOut}
+                  className="dropdown-item-signout"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            <p className="auth-item">
+              <NavLink
+                to="/sign-in"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Sign In
+              </NavLink>
+            </p>
+            <p className="auth-item">
+              <NavLink
+                to="/sign-up"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Sign Up
+              </NavLink>
+            </p>
+          </>
+        )}
       </div>
     </nav>
   );

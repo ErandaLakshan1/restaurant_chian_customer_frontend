@@ -4,14 +4,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Modal from "react-modal";
 
 import Home from "./pages/Home";
 import Registration from "./pages/auth/Registration";
 import Login from "./pages/auth/Login";
 import Restaurants from "./pages/Restaurants";
-import Restaurant from "./pages/Restaurant";  
+import Restaurant from "./pages/Restaurant";
+import Profile from "./pages/Profile";
 
 AOS.init();
+Modal.setAppElement("#root");
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -22,6 +25,7 @@ root.render(
       <Route path="/sign-in" element={<Login />} />
       <Route path="/restaurants" element={<Restaurants />} />
       <Route path="/restaurant/:id" element={<Restaurant />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   </BrowserRouter>
 );

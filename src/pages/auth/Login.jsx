@@ -8,6 +8,7 @@ import LoginImg from "../../assets/images/login-in.svg";
 import { NavLink } from "react-router-dom";
 import { loginUser } from "../../service/auth.service";
 import { useNavigate } from "react-router-dom";
+import { setAccessToken, setRefreshToken } from "../../utils/authUtils";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -49,8 +50,8 @@ const Login = () => {
             password: "",
           });
 
-          localStorage.setItem("access", response.data.access);
-          localStorage.setItem("refresh", response.data.refresh);
+          setAccessToken(response.data.access);
+          setRefreshToken(response.data.refresh);
           navigate("/");
         }
       } catch (error) {
