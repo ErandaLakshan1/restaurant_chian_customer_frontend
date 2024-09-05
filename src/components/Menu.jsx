@@ -36,7 +36,7 @@ const Menu = ({ branchId }) => {
       <div class="menu-cart-wrapper">
         {data.map((menu) => {
           return (
-            <div class="menu-cart-container">
+            <div class="menu-cart-container" data-aos="fade-up" data-aos-delay="300">
               <div class="menu-cart-image-container">
                 <img
                   alt="A meal tray with sauce, boiled eggs, sliced apples, and assorted vegetables"

@@ -8,6 +8,7 @@ import { popAlert } from "../utils/alerts";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import Menu from "../components/Menu";
 import constants from "../constants";
+import GalleryModal from "../components/GalleryModal";
 
 import "../assets/styles/pages/restaurant.css";
 
@@ -20,6 +21,7 @@ const Restaurant = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   //to get the branch details
   const fetchBranchDetails = async (id) => {
@@ -62,8 +64,12 @@ const Restaurant = () => {
       <div className="restaurant-page-bg">
         <Navbar />
 
-        <div className="restaurant-container">
-          <div className="restaurant-left-section">
+        <div className="restaurant-container" data-aos="fade-up">
+          <div
+            className="restaurant-left-section"
+            data-aos="fade-right"
+            data-aos-delay="200"
+          >
             <div className="restaurant-title">
               <h1>{data?.name || "Loading..."}</h1>
             </div>
@@ -75,9 +81,18 @@ const Restaurant = () => {
             <p className="restaurant-description">
               {data?.description || "Loading..."}
             </p>
-            <button className="view-gallery-btn">View Gallery</button>
+            <button
+              className="view-gallery-btn"
+              onClick={() => setIsModalOpen(true)}
+            >
+              View Gallery
+            </button>
           </div>
-          <div className="restaurant-right-section">
+          <div
+            className="restaurant-right-section"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
             <div className="restaurant-map-container">
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
@@ -92,6 +107,14 @@ const Restaurant = () => {
         <Menu branchId={id} />
         <Footer />
       </div>
+
+      {data && (
+        <GalleryModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          images={data.images || []}
+        />
+      )}
     </>
   );
 };
