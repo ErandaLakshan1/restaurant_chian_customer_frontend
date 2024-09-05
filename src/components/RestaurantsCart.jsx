@@ -4,10 +4,12 @@ import Loader from "./Loader";
 import "../assets/styles/components/restaurants_cart.css";
 import { getAllBranches } from "../service/branch.service";
 import noImg from "../assets/images/no-img.jpg";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantsCart = () => {
   const [loading, setLoading] = useState(false);
   const [branches, setBranches] = useState([]);
+  const navigate = useNavigate();
 
   // to get all the branch details
   const fetchBranches = async () => {
@@ -42,6 +44,7 @@ const RestaurantsCart = () => {
               data-aos="fade-up"
               data-aos-delay="200"
               key={branch.id}
+              onClick={() => navigate(`/restaurant/${branch.id}`)}
             >
               <img
                 src={
@@ -57,7 +60,10 @@ const RestaurantsCart = () => {
               </div>
 
               <div className="rcart-view-more-container">
-                <button className="rcart-view-more-btn">
+                <button
+                  className="rcart-view-more-btn"
+                  onClick={() => navigate(`/restaurant/${branch.id}`)}
+                >
                   View more
                   <span className="arrow">→</span>
                 </button>

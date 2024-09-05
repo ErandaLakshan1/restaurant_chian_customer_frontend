@@ -13,11 +13,13 @@ import Footer from "../components/Footer";
 import { getAllBranches } from "../service/branch.service";
 import Loader from "../components/Loader";
 import { popAlert } from "../utils/alerts";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const feedbacks = [
     {
@@ -161,7 +163,10 @@ const Home = () => {
               food and service at locations just around the corner!
             </i>
           </p>
-          <button className="view-all-button">
+          <button
+            className="view-all-button"
+            onClick={() => navigate("/restaurants")}
+          >
             View All Restaurants <span className="arrow">→</span>
           </button>
         </div>

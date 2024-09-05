@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Registration from "./pages/auth/Registration";
 import Login from "./pages/auth/Login";
 import Restaurants from "./pages/Restaurants";
+import Restaurant from "./pages/Restaurant";  
 
 AOS.init();
 
@@ -20,6 +21,7 @@ root.render(
       <Route path="/sign-up" element={<Registration />} />
       <Route path="/sign-in" element={<Login />} />
       <Route path="/restaurants" element={<Restaurants />} />
+      <Route path="/restaurant/:id" element={<Restaurant />} />
     </Routes>
   </BrowserRouter>
 );
