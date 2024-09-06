@@ -4,14 +4,16 @@ import Loader from "../components/Loader";
 import { popAlert } from "../utils/alerts";
 import { getMenuItemsByBranch } from "../service/menu.service";
 import noImg from "../assets/images/no-img.jpg";
-import { getCartItmes } from "../service/order.service";
+import { getCartItmes, createCart, updateCart } from "../service/order.service";
 
 const Menu = ({ branchId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
-  //to get the menu items according to branch
+  const [menuToCartIdMap, setMenuToCartIdMap] = useState({});
+
+  // fetch menu items
   const fetchMenuItems = async (id) => {
     setLoading(true);
     try {
@@ -28,13 +30,26 @@ const Menu = ({ branchId }) => {
     }
   };
 
-  //to fetch the cart items
+  // fetch cart items
   const fetchCartItems = async () => {
     setLoading(true);
-
     try {
       const response = await getCartItmes();
-      setCartItems(response.data);
+      if (response && response.data) {
+        const items = Array.isArray(response.data.items)
+          ? response.data.items
+          : [];
+        setCartItems(items);
+
+        const map = items.reduce((acc, item) => {
+          acc[item.menu_item.id] = item.id;
+          return acc;
+        }, {});
+        setMenuToCartIdMap(map);
+      } else {
+        setCartItems([]);
+        setMenuToCartIdMap({});
+      }
     } catch (error) {
       popAlert(
         "Oops...",
@@ -46,46 +61,144 @@ const Menu = ({ branchId }) => {
     }
   };
 
+  // add items to cart
+  const handleAddToCart = async (menuItemId, quantity) => {
+    const data = {
+      branch: branchId,
+      items: [
+        {
+          menu_item: menuItemId,
+          quantity: quantity,
+        },
+      ],
+    };
+
+    try {
+      const result = await createCart(data);
+      if (result.success) {
+        popAlert("Success", "Item added to cart!", "success");
+        fetchCartItems();
+      } else {
+        popAlert(
+          "Error",
+          result.errors.general || "Failed to add item to cart.",
+          "error"
+        );
+      }
+    } catch (error) {
+      popAlert(
+        "Error",
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
+    }
+  };
+
+  // update cart item quantity
+  const handleUpdateQuantity = async (menuItemId, newQuantity) => {
+    const cartItemId = menuToCartIdMap[menuItemId];
+    if (!cartItemId) {
+      console.error("Cart item ID not found for menu item:", menuItemId);
+      return;
+    }
+
+    console.log(
+      "Updating cart item:",
+      cartItemId,
+      "with new quantity:",
+      newQuantity
+    ); // Debug log
+    try {
+      const data = { quantity: newQuantity };
+      const result = await updateCart(cartItemId, data);
+      if (result.success) {
+        fetchCartItems(); 
+        popAlert("Success", "Cart updated successfully!", "success");
+      } else {
+        popAlert(
+          "Error",
+          result.errors.general || "Failed to update cart.",
+          "error"
+        );
+      }
+    } catch (error) {
+      popAlert(
+        "Error",
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
+    }
+  };
+
   useEffect(() => {
     fetchMenuItems(branchId);
-    fetchCartItems()
+    fetchCartItems();
   }, [branchId]);
+
+  const getCartItemQuantity = (menuItemId) => {
+    const cartItem = cartItems.find((item) => item.menu_item.id === menuItemId);
+    return cartItem ? cartItem.quantity : 0;
+  };
 
   return (
     <>
-      {loading ? Loader(loading) : null}
-      <div class="menu-cart-wrapper">
+      {loading ? <Loader /> : null}
+      <div className="menu-cart-wrapper">
         {data.map((menu) => {
+          const quantity = getCartItemQuantity(menu.id);
+          const isInCart = quantity > 0;
+
           return (
             <div
-              class="menu-cart-container"
+              className="menu-cart-container"
+              key={menu.id}
               data-aos="fade-up"
               data-aos-delay="300"
             >
-              <div class="menu-cart-image-container">
-                <img
-                  alt="A meal tray with sauce, boiled eggs, sliced apples, and assorted vegetables"
-                  src={
-                    menu.images[0]?.image_url
-                      ? menu.images[0]?.image_url
-                      : noImg
-                  }
-                />
+              <div className="menu-cart-image-container">
+                <img alt={menu.name} src={menu.images[0]?.image_url || noImg} />
               </div>
-              <div class="menu-cart-title">{menu.name}</div>
-              <div class="menu-cart-description">{menu.description}</div>
-              <div class="menu-cart-price">Rs. {menu.price}</div>
-              <div class="menu-cart-quantity">
-                <button>-</button>
-                <input type="text" value="1" />
-                <button>+</button>
+              <div className="menu-cart-title">{menu.name}</div>
+              <div className="menu-cart-description">{menu.description}</div>
+              <div className="menu-cart-price">Rs. {menu.price}</div>
+              <div className="menu-cart-quantity">
+                <button
+                  onClick={() => {
+                    if (isInCart && quantity > 1) {
+                      handleUpdateQuantity(menu.id, quantity - 1);
+                    }
+                  }}
+                >
+                  -
+                </button>
+                <input type="text" value={isInCart ? quantity : "1"} readOnly />
+                <button
+                  onClick={() => {
+                    if (isInCart) {
+                      handleUpdateQuantity(menu.id, quantity + 1);
+                    } else {
+                      handleAddToCart(menu.id, 1);
+                    }
+                  }}
+                >
+                  +
+                </button>
               </div>
               <button
-                class="menu-cart-add-to-basket"
-                disabled={!menu.is_available}
+                className={`menu-cart-add-to-basket ${isInCart ? "added" : ""}`}
+                disabled={!menu.is_available && !isInCart}
+                onClick={() => {
+                  if (!isInCart) {
+                    handleAddToCart(menu.id, 1);
+                  }
+                }}
               >
                 <span>
-                  {!menu.is_available ? "Out of Stock" : "Add to Cart"}
+                  {isInCart
+                    ? "Added"
+                    : !menu.is_available
+                    ? "Out of Stock"
+                    : "Add to Cart"}
                 </span>
               </button>
             </div>

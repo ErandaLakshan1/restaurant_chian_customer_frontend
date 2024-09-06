@@ -44,7 +44,7 @@ const Cart = ({ isOpen, onClose }) => {
   const handleUpdateCart = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
     setLoading(true);
-
+    console.log("Updating item:", itemId, "with quantity:", newQuantity);
     try {
       const result = await updateCart(itemId, { quantity: newQuantity });
       if (result.success) {

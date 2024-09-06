@@ -75,7 +75,7 @@
 }
 
 .menu-cart-add-to-basket {
-  background-color: #f0a500;
+  background-color: #f0a500; 
   border: none;
   border-radius: 10px;
   color: #ffffff;
@@ -90,13 +90,16 @@
   margin: 0 auto;
 }
 
-.menu-cart-add-to-basket:disabled {
-  background-color: #cccccc;
+.menu-cart-add-to-basket.added {
+  background-color: #cccccc; 
   color: #666666;
-  cursor: not-allowed;
+  cursor: not-allowed; 
+}
+
+.menu-cart-add-to-basket:disabled {
+  background-color: #cccccc; 
+  color: #666666;
+  cursor: not-allowed; 
   box-shadow: none;
 }
 
-.menu-cart-add-to-basket:disabled span {
-  font-size: 16px;
-}
