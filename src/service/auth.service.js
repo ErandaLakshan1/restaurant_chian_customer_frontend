@@ -57,3 +57,21 @@ export const getUserProfile = async () => {
     }
   }
 };
+
+//for delete user account
+export const deleteUserAccount = async () => {
+  try {
+    const response = await getApI().delete("api/users/delete/user_account/");
+    return { success: true, data: response.data };
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return { success: false, errors: error.response.data };
+    } else {
+      console.error("An unexpected error occurred:", error);
+      return {
+        success: false,
+        errors: { general: "An unexpected error occurred. Please try again." },
+      };
+    }
+  }
+};
