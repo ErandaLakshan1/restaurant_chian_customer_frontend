@@ -97,6 +97,13 @@ const Navbar = () => {
                 >
                   Order History
                 </NavLink>
+                <NavLink
+                  to="/order-history"
+                  className="dropdown-item"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  Your Reservations
+                </NavLink>
                 <button
                   onClick={handleSignOut}
                   className="dropdown-item-signout"

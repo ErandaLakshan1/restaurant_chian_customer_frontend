@@ -44,7 +44,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserProfile();
-  }, []);
+  });
 
   const handleDeleteAccount = async () => {
     const confirmDelete = window.confirm(

@@ -9,7 +9,12 @@ import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import Menu from "../components/Menu";
 import constants from "../constants";
 import GalleryModal from "../components/GalleryModal";
-
+import { isAuthenticated } from "../utils/authUtils";
+import Reservation from "../components/Reservation";
+import { getTables, resarveTable } from "../service/reservation.service";
+import { removeAccessToken, removeRefreshToken } from "../utils/authUtils";
+import { useNavigate } from "react-router-dom";
+import { formatDateToISO } from "../utils/formatDate";
 import "../assets/styles/pages/restaurant.css";
 
 const mapContainerStyle = {
@@ -21,7 +26,10 @@ const Restaurant = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   //to get the branch details
   const fetchBranchDetails = async (id) => {
@@ -41,8 +49,27 @@ const Restaurant = () => {
     }
   };
 
+  // to get tables details
+  const fetchTables = async (id) => {
+    setLoading(true);
+
+    try {
+      const response = await getTables(id);
+      setTableData(response.data);
+    } catch (error) {
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchBranchDetails(id);
+    fetchTables(id);
   }, [id]);
 
   const { isLoaded, loadError } = useLoadScript({
@@ -50,12 +77,60 @@ const Restaurant = () => {
   });
 
   if (loadError) return <div>Error loading maps</div>;
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return Loader(isLoaded);
 
   // Check if data is available and set map center
   const mapCenter = {
     lat: data?.latitude || 0,
     lng: data?.longitude || 0,
+  };
+
+  const handleReserveTable = async (tableId, date) => {
+    setLoading(true);
+    try {
+      const formattedDate = formatDateToISO(date);
+
+      const data = {
+        reservation_date: formattedDate,
+        table: tableId,
+      };
+
+      const response = await resarveTable(data);
+      console.log(response);
+
+      if (response.success) {
+        popAlert(
+          "Success",
+          `Successfully reserved table ${tableId}.`,
+          "success"
+        );
+      } else {
+        const errorMessages = response.errors.data?.non_field_errors || [
+          "An unexpected error occurred",
+        ];
+        const errorMessage = errorMessages.join(", ");
+        popAlert("Oops...", errorMessage, "error");
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        removeAccessToken();
+        removeRefreshToken();
+        navigate("/sign-in");
+        popAlert(
+          "Oops...",
+          "Your session has expired. Please sign in again.",
+          "error"
+        );
+      } else {
+        popAlert(
+          "Oops...",
+          "An unexpected error occurred. Please try again.",
+          "error"
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,6 +162,15 @@ const Restaurant = () => {
             >
               View Gallery
             </button>
+
+            {isAuthenticated() && (
+              <button
+                className="make-reservation-btn"
+                onClick={() => setIsReservationModalOpen(true)}
+              >
+                Make a Table Reservation
+              </button>
+            )}
           </div>
           <div
             className="restaurant-right-section"
@@ -115,6 +199,13 @@ const Restaurant = () => {
           images={data.images || []}
         />
       )}
+
+      <Reservation
+        isOpen={isReservationModalOpen}
+        onRequestClose={() => setIsReservationModalOpen(false)}
+        tables={tableData}
+        onReserve={handleReserveTable}
+      />
     </>
   );
 };
