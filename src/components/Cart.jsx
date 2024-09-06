@@ -8,10 +8,13 @@ import {
   removeItems,
   deleteCart,
 } from "../service/order.service";
+import { useNavigate } from "react-router-dom";
 
 const Cart = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [cartId, setCartId] = useState("");
+  const navigate = useNavigate();
 
   //to fetch the cart items
   const fetchCartItems = async () => {
@@ -22,6 +25,7 @@ const Cart = ({ isOpen, onClose }) => {
         setCartItems(
           Array.isArray(response.data.items) ? response.data.items : []
         );
+        setCartId(response.data.id);
       } else {
         setCartItems([]);
       }
@@ -196,6 +200,18 @@ const Cart = ({ isOpen, onClose }) => {
             <li className="cart-item">Ooops.... Cart is empty</li>
           )}
         </ul>
+        {cartItems.length > 0 ? (
+          <>
+            <button
+              className="place-order-btn"
+              onClick={() => {
+                navigate(`/place-order?cartId=${cartId}`);
+              }}
+            >
+              Place Order
+            </button>
+          </>
+        ) : null}
       </div>
     </>
   );

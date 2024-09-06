@@ -12,6 +12,7 @@ import Login from "./pages/auth/Login";
 import Restaurants from "./pages/Restaurants";
 import Restaurant from "./pages/Restaurant";
 import Profile from "./pages/Profile";
+import PlaceOrder from "./pages/PlaceOrder";
 
 AOS.init();
 Modal.setAppElement("#root");
@@ -26,6 +27,7 @@ root.render(
       <Route path="/restaurants" element={<Restaurants />} />
       <Route path="/restaurant/:id" element={<Restaurant />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/place-order" element={<PlaceOrder />} />
     </Routes>
   </BrowserRouter>
 );

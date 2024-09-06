@@ -1,0 +1,110 @@
+.place-order-page-bg {
+  background-image: url("../../images/background.png");
+  background-size: cover;
+  width: 100%;
+  text-align: center;
+}
+
+.place-order-page {
+  display: flex;
+  min-height: 100vh;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 20px;
+}
+
+.place-order-image-section {
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.place-order-image {
+  width: 100%;
+  height: 100%;
+}
+
+.place-order-form-section {
+  flex: 2;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.place-order-heading {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.place-order-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.place-order-fieldset {
+  border: none;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.place-order-legend {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.place-order-label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.place-order-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.place-order-radio {
+  width: auto;
+  margin-right: 10px;
+}
+
+.place-order-radio-label {
+  font-size: 14px;
+}
+
+.place-order-form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.place-order-form-group {
+  flex: 1;
+}
+
+.place-order-submit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.place-order-submit-button:hover {
+  background-color: #45a049;
+}
+
+.place-order-submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
