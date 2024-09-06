@@ -1,33 +1,200 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/styles/components/cart.css";
+import Loader from "./Loader";
+import { popAlert } from "../utils/alerts";
+import {
+  getCartItmes,
+  updateCart,
+  removeItems,
+  deleteCart,
+} from "../service/order.service";
 
-const Cart = ({ isOpen, onClose, items }) => {
+const Cart = ({ isOpen, onClose }) => {
+  const [loading, setLoading] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+
+  //to fetch the cart items
+  const fetchCartItems = async () => {
+    setLoading(true);
+    try {
+      const response = await getCartItmes();
+      if (response && response.data) {
+        setCartItems(
+          Array.isArray(response.data.items) ? response.data.items : []
+        );
+      } else {
+        setCartItems([]);
+      }
+    } catch (error) {
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  // to update the cart item
+  const handleUpdateCart = async (itemId, newQuantity) => {
+    if (newQuantity < 1) return;
+    setLoading(true);
+
+    try {
+      const result = await updateCart(itemId, { quantity: newQuantity });
+      if (result.success) {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === itemId ? { ...item, quantity: newQuantity } : item
+          )
+        );
+      } else {
+        popAlert(
+          "Update Failed",
+          result.errors.general || "An error occurred while updating the cart.",
+          "error"
+        );
+      }
+    } catch (error) {
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred while updating the cart. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // to remove item from the cart
+  const handleRemoveItem = async (itemId) => {
+    setLoading(true);
+    try {
+      const result = await removeItems(itemId);
+      if (result.success) {
+        setCartItems((prevItems) =>
+          prevItems.filter((item) => item.id !== itemId)
+        );
+        popAlert(
+          "Item Removed",
+          "The item has been removed from your cart.",
+          "success"
+        );
+      } else {
+        popAlert(
+          "Removal Failed",
+          result.errors.general || "An error occurred while removing the item.",
+          "error"
+        );
+      }
+    } catch (error) {
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred while removing the item. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // to delete the cart
+  const handleDeleteCart = async () => {
+    setLoading(true);
+    try {
+      const result = await deleteCart();
+      if (result.success) {
+        setCartItems([]);
+        popAlert(
+          "Cart Cleared",
+          "All items have been removed from your cart.",
+          "success"
+        );
+      } else {
+        popAlert(
+          "Deletion Failed",
+          result.errors.general || "An error occurred while clearing the cart.",
+          "error"
+        );
+      }
+    } catch (error) {
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred while clearing the cart. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
+      {loading ? <Loader /> : null}
       {isOpen && <div className="cart-overlay" onClick={onClose} />}
       <div className={`cart-panel ${isOpen ? "open" : ""}`}>
         <button className="cart-close-btn" onClick={onClose}>
           &times;
         </button>
-        <h2 className="cart-title">Cart Items</h2>
+        <div className="cart-header">
+          <h2 className="cart-title">Cart Items</h2>
+          <button
+            className="cart-delete-btn"
+            onClick={handleDeleteCart}
+            disabled={loading}
+            title="Clear Cart"
+          >
+            🗑️
+          </button>
+        </div>
         <ul className="cart-list">
-          <li className="cart-item">
-            <img
-              alt="Meal with egg, kiwi, and sauce chilli"
-              className="cart-item-image"
-              src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-Hh5RPsKhtBPsWCFSiEKnUJ6x/user-8qgiVpCV0U0b7zDjfFInHgjl/img-bUTOjhP7rKcjkaHF5dAWtfCD.png?st=2024-09-06T10%3A10%3A14Z&amp;se=2024-09-06T12%3A10%3A14Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-05T21%3A36%3A37Z&amp;ske=2024-09-06T21%3A36%3A37Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=kRQSoJi3lcPmOmbc9s4tRqAle4X9D%2BR24DsZHthnpaw%3D"
-            />
-            <div className="cart-item-details">
-              <h3 className="cart-item-title">Egg, kiwi and sauce chilli</h3>
-              <div className="cart-item-price">$39</div>
-            </div>
-            <button className="cart-item-remove-btn">×</button>
-            <div className="cart-item-quantity">
-              <button>-</button>
-              <div className="cart-item-quantity-number">2</div>
-              <button>+</button>
-            </div>
-          </li>
+          {cartItems.length > 0 ? (
+            cartItems.map((item) => (
+              <li key={item.id} className="cart-item">
+                <img
+                  alt={item.menu_item.name}
+                  className="cart-item-image"
+                  src={item.menu_item.images[0].image_url}
+                />
+                <div className="cart-item-details">
+                  <h3 className="cart-item-title">{item.menu_item.name}</h3>
+                  <div className="cart-item-price">
+                    Rs. {item.menu_item.price * item.quantity}
+                  </div>
+                </div>
+                <button
+                  className="cart-item-remove-btn"
+                  onClick={() => handleRemoveItem(item.id)}
+                >
+                  ×
+                </button>
+                <div className="cart-item-quantity">
+                  <button
+                    onClick={() => handleUpdateCart(item.id, item.quantity - 1)}
+                    disabled={loading || item.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <div className="cart-item-quantity-number">
+                    {item.quantity}
+                  </div>
+                  <button
+                    onClick={() => handleUpdateCart(item.id, item.quantity + 1)}
+                    disabled={loading}
+                  >
+                    +
+                  </button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="cart-item">Ooops.... Cart is empty</li>
+          )}
         </ul>
       </div>
     </>

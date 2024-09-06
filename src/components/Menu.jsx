@@ -4,10 +4,12 @@ import Loader from "../components/Loader";
 import { popAlert } from "../utils/alerts";
 import { getMenuItemsByBranch } from "../service/menu.service";
 import noImg from "../assets/images/no-img.jpg";
+import { getCartItmes } from "../service/order.service";
 
 const Menu = ({ branchId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
   //to get the menu items according to branch
   const fetchMenuItems = async (id) => {
@@ -26,8 +28,27 @@ const Menu = ({ branchId }) => {
     }
   };
 
+  //to fetch the cart items
+  const fetchCartItems = async () => {
+    setLoading(true);
+
+    try {
+      const response = await getCartItmes();
+      setCartItems(response.data);
+    } catch (error) {
+      popAlert(
+        "Oops...",
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchMenuItems(branchId);
+    fetchCartItems()
   }, [branchId]);
 
   return (
@@ -36,7 +57,11 @@ const Menu = ({ branchId }) => {
       <div class="menu-cart-wrapper">
         {data.map((menu) => {
           return (
-            <div class="menu-cart-container" data-aos="fade-up" data-aos-delay="300">
+            <div
+              class="menu-cart-container"
+              data-aos="fade-up"
+              data-aos-delay="300"
+            >
               <div class="menu-cart-image-container">
                 <img
                   alt="A meal tray with sauce, boiled eggs, sliced apples, and assorted vegetables"
