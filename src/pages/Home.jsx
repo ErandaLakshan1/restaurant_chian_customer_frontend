@@ -14,12 +14,16 @@ import { getAllBranches } from "../service/branch.service";
 import Loader from "../components/Loader";
 import { popAlert } from "../utils/alerts";
 import { useNavigate } from "react-router-dom";
+import Cart from "../components/Cart";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const togglePanel = () => setIsPanelOpen(!isPanelOpen);
 
   const feedbacks = [
     {
@@ -78,7 +82,8 @@ const Home = () => {
       {loading ? Loader(loading) : null}
       <div className="home-page-bg">
         <div className="home-page">
-          <Navbar />
+          <Navbar onToggleSidePanel={togglePanel} />
+          <Cart isOpen={isPanelOpen} onClose={togglePanel}  />
           <section className="hero-section" data-aos="fade-up">
             <div
               className="hero-content"

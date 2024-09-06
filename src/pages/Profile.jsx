@@ -8,11 +8,14 @@ import { removeRefreshToken, removeAccessToken } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/pages/profile.css";
 import profileImg from "../assets/images/profile.svg";
+import Cart from "../components/Cart";
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const navigate = useNavigate();
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const togglePanel = () => setIsPanelOpen(!isPanelOpen);
 
   // Fetch user profile
   const fetchUserProfile = async () => {
@@ -44,7 +47,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserProfile();
-  });
+  }, []);
 
   const handleDeleteAccount = async () => {
     const confirmDelete = window.confirm(
@@ -71,7 +74,8 @@ const Profile = () => {
     <>
       {loading && <Loader />}
       <div className="profile-page-bg">
-        <Navbar />
+        <Navbar onToggleSidePanel={togglePanel} />
+        <Cart isOpen={isPanelOpen} onClose={togglePanel} />
 
         <div className="profile-page">
           <div className="profile-image-section">

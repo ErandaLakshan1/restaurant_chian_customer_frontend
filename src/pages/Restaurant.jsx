@@ -16,6 +16,7 @@ import { removeAccessToken, removeRefreshToken } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import { formatDateToISO } from "../utils/formatDate";
 import "../assets/styles/pages/restaurant.css";
+import Cart from "../components/Cart";
 
 const mapContainerStyle = {
   width: "100%",
@@ -30,6 +31,9 @@ const Restaurant = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const togglePanel = () => setIsPanelOpen(!isPanelOpen);
 
   //to get the branch details
   const fetchBranchDetails = async (id) => {
@@ -137,8 +141,8 @@ const Restaurant = () => {
     <>
       {loading && Loader(loading)}
       <div className="restaurant-page-bg">
-        <Navbar />
-
+        <Navbar onToggleSidePanel={togglePanel}/>
+        <Cart isOpen={isPanelOpen} onClose={togglePanel} items={""} />
         <div className="restaurant-container" data-aos="fade-up">
           <div
             className="restaurant-left-section"

@@ -9,8 +9,9 @@ import {
 } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import avtart from "../assets/images/avatar.png";
+import cartIcon from "../assets/images/cart-icon.svg";
 
-const Navbar = () => {
+const Navbar = ({ onToggleSidePanel }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -69,6 +70,9 @@ const Navbar = () => {
       <div className="navbar-auth">
         {isAuthenticated() ? (
           <div className="navbar-user">
+            <button className="navbar-cart-btn" onClick={onToggleSidePanel}>
+              <img src={cartIcon} alt="cart" />
+            </button>
             <img
               src={avtart}
               alt="User Avatar"

@@ -52,7 +52,7 @@ const RestaurantsCart = () => {
                     ? branch.images[0]?.image_url
                     : noImg
                 }
-                alt={`${branch.name} image`}
+                alt={branch.name}
               />
               <div className="rcart-card-content">
                 <h2>{branch.name}</h2>
