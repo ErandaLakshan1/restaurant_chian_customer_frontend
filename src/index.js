@@ -13,6 +13,7 @@ import Restaurants from "./pages/Restaurants";
 import Restaurant from "./pages/Restaurant";
 import Profile from "./pages/Profile";
 import PlaceOrder from "./pages/PlaceOrder";
+import OrderHistroy from "./pages/OrderHistroy";
 
 AOS.init();
 Modal.setAppElement("#root");
@@ -28,6 +29,7 @@ root.render(
       <Route path="/restaurant/:id" element={<Restaurant />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/place-order" element={<PlaceOrder />} />
+      <Route path="/order-history" element={<OrderHistroy />} />
     </Routes>
   </BrowserRouter>
 );

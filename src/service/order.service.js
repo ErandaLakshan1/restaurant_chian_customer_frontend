@@ -117,3 +117,23 @@ export const placeOrder = async (data) => {
     }
   }
 };
+
+// to get the order history
+export const getOrderHistory = async () => {
+  try {
+    const response = await getApI().get(
+      "api/orders/get/order_histroy_by_user/"
+    );
+    return { success: true, data: response.data };
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return { success: false, errors: error.response.data };
+    } else {
+      console.error("An unexpected error occurred:", error);
+      return {
+        success: false,
+        errors: { general: "An unexpected error occurred. Please try again." },
+      };
+    }
+  }
+};
