@@ -20,10 +20,27 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedBranchId, setSelectedBranchId] = useState("");
   const navigate = useNavigate();
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const togglePanel = () => setIsPanelOpen(!isPanelOpen);
+
+  const handleBranchChange = (event) => {
+    setSelectedBranchId(event.target.value);
+  };
+
+  const handleOrderNow = () => {
+    if (selectedBranchId) {
+      navigate(`/restaurant/${selectedBranchId}`);
+    } else {
+      popAlert(
+        "Selection Required",
+        "Please select a branch before navigate.",
+        "warning"
+      );
+    }
+  };
 
   const feedbacks = [
     {
@@ -73,7 +90,7 @@ const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % feedbacks.length);
-    }, 5000);
+    }, 1000);
     return () => clearInterval(interval);
   }, [feedbacks.length]);
 
@@ -83,7 +100,7 @@ const Home = () => {
       <div className="home-page-bg">
         <div className="home-page">
           <Navbar onToggleSidePanel={togglePanel} />
-          <Cart isOpen={isPanelOpen} onClose={togglePanel}  />
+          <Cart isOpen={isPanelOpen} onClose={togglePanel} />
           <section className="hero-section" data-aos="fade-up">
             <div
               className="hero-content"
@@ -93,15 +110,21 @@ const Home = () => {
               <h1>The Best Restaurants In Your Home</h1>
               <p>Experience the best dining from the comfort of your home.</p>
               <div className="branch-selection-container">
-                <select className="branch-selection">
-                  <option>Select the branch</option>
+                <select
+                  className="branch-selection"
+                  onChange={handleBranchChange}
+                  value={selectedBranchId}
+                >
+                  <option value="">Select the branch</option>
                   {branches.map((branch) => (
-                    <option key={branch.id} value={branch.name}>
+                    <option key={branch.id} value={branch.id}>
                       {branch.name}
                     </option>
                   ))}
                 </select>
-                <button className="order-now-button">Order Now</button>
+                <button className="order-now-button" onClick={handleOrderNow}>
+                  Order Now
+                </button>
               </div>
             </div>
             <img

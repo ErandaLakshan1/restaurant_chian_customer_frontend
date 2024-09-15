@@ -41,8 +41,10 @@ const Cart = ({ isOpen, onClose }) => {
   };
 
   useEffect(() => {
-    fetchCartItems();
-  }, []);
+    if (isOpen) {
+      fetchCartItems();
+    }
+  }, [isOpen]);
 
   // to update the cart item
   const handleUpdateCart = async (itemId, newQuantity) => {
@@ -119,6 +121,7 @@ const Cart = ({ isOpen, onClose }) => {
           "All items have been removed from your cart.",
           "success"
         );
+        window.location.reload();
       } else {
         popAlert(
           "Deletion Failed",
